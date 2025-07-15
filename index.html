@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishSentry Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f7f9fc; color: #333; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #00509e; }
+    input[type="text"] { width: calc(100% - 22px); padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 10px 20px; margin: 5px; border: none; border-radius: 4px; background-color: #00509e; color: #fff; cursor: pointer; }
+    button:hover { background-color: #003f7d; }
+    .result { margin-top: 20px; padding: 15px; border-radius: 4px; }
+    .safe { background-color: #e3fcec; color: #027a3b; }
+    .phish { background-color: #fdecea; color: #b3241d; }
+    .hidden { display: none; }
+    .popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+    .popup-content { background: #fff; padding: 20px; border-radius: 8px; text-align: center; max-width: 400px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>PhishSentry Demo</h1>
+    <p>Enter a URL to check for phishing threats:</p>
+    <input type="text" id="urlInput" placeholder="https://example.com/login" />
+    <button onclick="checkUrl()">Check URL</button>
+    <div id="result" class="result hidden"></div><hr />
+<h2>Simulate Fake 2FA Attack</h2>
+<button onclick="showPhishPopup()">Launch Fake 2FA Popup</button>
+
+  </div>  <!-- Fake 2FA Popup -->  <div id="phishPopup" class="popup hidden">
+    <div class="popup-content">
+      <h3>Security Check</h3>
+      <p>Please enter the code sent to your phone:</p>
+      <input type="text" id="codeInput" placeholder="Enter code" />
+      <button onclick="detectPopup()">Submit</button>
+    </div>
+  </div>  <script>
+    function checkUrl() {
+      const url = document.getElementById('urlInput').value.trim();
+      const resultEl = document.getElementById('result');
+      resultEl.className = 'result';
+      if (!url) { resultEl.textContent = 'Please enter a URL.'; resultEl.classList.add('phish'); return; }
+
+      // Simple heuristic checks
+      const suspiciousPatterns = [
+        /\d+\.\d+\.\d+\.\d+/,         // IP address
+        /login/i, /verify/i, /secure/i,      // keywords
+        /@/, /\s/                           // invalid chars
+      ];
+      let flagged = false;
+      for (const pat of suspiciousPatterns) {
+        if (pat.test(url)) { flagged = true; break; }
+      }
+
+      if (url.length > 75) flagged = true;  // excessive length
+
+      if (flagged) {
+        resultEl.textContent = '⚠️ Phishing risk detected!';
+        resultEl.classList.add('phish');
+      } else {
+        resultEl.textContent = '✅ URL appears safe.';
+        resultEl.classList.add('safe');
+      }
+      resultEl.classList.remove('hidden');
+    }
+
+    function showPhishPopup() {
+      document.getElementById('phishPopup').classList.remove('hidden');
+    }
+    function detectPopup() {
+      const code = document.getElementById('codeInput').value;
+      document.getElementById('phishPopup').classList.add('hidden');
+      alert(code
+        ? '⚠️ This was a simulated phishing 2FA! Never enter codes on unknown popups.'
+        : '⚠️ No code entered – phishing attempt detected.');
+    }
+  </script></body>
+	</html>
+
