@@ -1,0 +1,21 @@
+{
+  "name": "phishsentry",
+  "version": "1.0.0",
+  "description": "PhishSentry full-stack phishing detection app",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "NODE_ENV=development node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@ljharb/tsconfig": "^0.3.2",
+    "typescript": "^6.0.3"
+  }
+}
